@@ -10,7 +10,11 @@ class Tour:
     def total_cost(self, total_cost: int):
         self.total_cost = total_cost
 
-    '''def get_info(self) -> str:
-        return '{ID: ' + self.node_id + '\t' + 'x_coordinate: ' \
-               + self.x + 'y_coordinate: ' + self.y'''
+    def __str__(self):
+        tour = '['
+        curr_node = self.root_tour
+        while curr_node.neighbor is not None:
+            tour += str(curr_node.node_id) + '-'
+            curr_node = curr_node.neighbor
 
+        return tour[:-1] + ']'

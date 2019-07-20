@@ -1,1 +1,0 @@
-class Processed_problem:
