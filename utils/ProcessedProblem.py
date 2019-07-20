@@ -1,4 +1,7 @@
 class ProcessedProblem:
+    """
+
+    """
 
     def __init__(self, name: str, description: str, dimension: int, edge_type: str, type_problem='TSP'):
         self.name = name
@@ -9,6 +12,11 @@ class ProcessedProblem:
         self.tour = None
 
     def set_tour(self, tour: 'Tour'):
+        """
+
+        :param tour:
+        :return:
+        """
         self.tour = tour
 
     def __str__(self):

@@ -5,21 +5,29 @@ from utils.ProcessedProblem import ProcessedProblem
 from utils.Tour import Tour
 
 
-def read_file(problem_name: str) -> tuple:
-    with open(Path(problem_name + '.tsp').resolve(), encoding='utf-8') as tsp_file:
+def read_file(problem_name: str):
+    """
+
+    :param problem_name:
+    :return:
+    """
+
+    tsp_file_path = Path.cwd().parent / 'TSPLIB_instances' / problem_name
+
+    with open(tsp_file_path / (problem_name + '.tsp'), encoding='utf-8') as tsp_file:
         tsp_lines = tsp_file.readlines()
 
         problem = ProcessedProblem(tsp_lines[0].split(':')[1][1:],
                                    tsp_lines[1].split(':')[1][1:],
                                    tsp_lines[3].split(':')[1][1:],
                                    tsp_lines[4].split(':')[1][1:])
-
+        
         tsp_nodes = list()
         for node in tsp_lines[6:-1]:
             node_info = node.split(' ')
             tsp_nodes.append(Node(int(node_info[0]), int(node_info[1]), int(node_info[2])))
 
-    with open(Path(problem_name + '.opt.tour').resolve(), encoding='utf-8') as opt_file:
+    with open(tsp_file_path / (problem_name + '.opt.tour'), encoding='utf-8') as opt_file:
         opt_lines = opt_file.readlines()
 
         tsp_tour = Tour()

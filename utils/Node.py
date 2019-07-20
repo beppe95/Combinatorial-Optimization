@@ -1,5 +1,7 @@
 class Node:
+    """
 
+    """
     def __init__(
             self,
             node_id: int,
@@ -15,6 +17,12 @@ class Node:
         self.cost = cost
 
     def set_neighbor(self, neighbor: 'Node', c: int = None):
+        """
+
+        :param neighbor:
+        :param c:
+        :return:
+        """
         self.neighbor = neighbor
         self.cost = c
 
