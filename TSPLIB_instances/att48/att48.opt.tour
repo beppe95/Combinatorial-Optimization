@@ -2,6 +2,7 @@ NAME : att48.opt.tour
 COMMENT : Optimum solution for att48   
 TYPE : TOUR
 DIMENSION : 48
+COST : 10628
 TOUR_SECTION
 1
 8

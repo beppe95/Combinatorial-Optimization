@@ -1,18 +1,19 @@
 from pathlib import Path
 
-from utils.Node import Node
-from utils.ProcessedProblem import ProcessedProblem
-from utils.Tour import Tour
+from data_structure.Node import Node
+from data_structure.ProcessedProblem import ProcessedProblem
+from data_structure.Tour import Tour
 
 
 def read_file(problem_name: str):
     """
+    Read both .tsp and .opt.tour files from a TSPLIB problem.
 
-    :param problem_name:
+    :param problem_name: TSP name from TSPLIB repository
     :return:
     """
 
-    tsp_file_path = Path.cwd().parent / 'TSPLIB_instances' / problem_name
+    tsp_file_path = Path.cwd() / 'TSPLIB_instances' / problem_name
 
     with open(tsp_file_path / (problem_name + '.tsp'), encoding='utf-8') as tsp_file:
         tsp_lines = tsp_file.readlines()
@@ -21,7 +22,7 @@ def read_file(problem_name: str):
                                    tsp_lines[1].split(':')[1][1:],
                                    tsp_lines[3].split(':')[1][1:],
                                    tsp_lines[4].split(':')[1][1:])
-        
+
         tsp_nodes = list()
         for node in tsp_lines[6:-1]:
             node_info = node.split(' ')
@@ -31,13 +32,11 @@ def read_file(problem_name: str):
         opt_lines = opt_file.readlines()
 
         tsp_tour = Tour()
-        tsp_tour.set_root(Node(int(opt_lines[5])))
-        curr_node = tsp_tour.root_tour
 
-        for opt_node in opt_lines[6:-1]:
-            node_to_be_add = Node(int(opt_node))
-            curr_node.set_neighbor(node_to_be_add)
-            curr_node = node_to_be_add
+        for opt_node in opt_lines[6:-2]:
+            tsp_tour.add_entry(int(opt_node))
+
+    tsp_tour.total_cost = int(opt_lines[4].split(':')[1])
 
     problem.set_tour(tsp_tour)
 
