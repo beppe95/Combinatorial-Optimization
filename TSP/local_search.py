@@ -49,7 +49,7 @@ def two_opt(current_tour: Tour, distances_matrix: zeros) -> Tour:
 
 def get_edges_cost(distances_matrix: zeros, current_path: list, index1: int, index2: int, case: str = 'old') -> int:
     """
-    Calculate the cost of the edges to be swapped inside the tour.
+    Calculates the cost of the edges to be swapped inside the tour.
 
     :param distances_matrix: distances matrix for a TSP.
     :param current_path: list which contains the current path.
@@ -85,7 +85,7 @@ def three_opt(current_tour: Tour, distances_matrix: zeros) -> Tour:
     while improved:
         info(' Started iteration %d', iteration)
         improved = False
-        for (i, j, k) in possible_segments(len(current_tour.path)):
+        for (i, j, k) in get_combinations(len(current_tour.path)):
             for case in dict_cost:
                 dict_cost[case] = get_moves_cost(distances_matrix, best_tour.path, case, i, j, k)
 
@@ -103,78 +103,76 @@ def three_opt(current_tour: Tour, distances_matrix: zeros) -> Tour:
     return current_tour
 
 
-def possible_segments(n: int):
+def get_combinations(n: int):
     """
     Generate all possible i-j-k feasible combinations for the given input number.
 
     :param n: input number
     :return: a generator which contains ll possible i-j-k feasible combinations for the given input number.
     """
-    segments = ((i+1, j+1, k+1) for i in range(n) for j in range(i + 2, n-1) for k in range(j + 2, n - 2 + (i > 0)))
-    return segments
+    combinations = ((i+1, j+1, k+1) for i in range(n) for j in range(i + 2, n-1) for k in range(j + 2, n - 2 + (i > 0)))
+    return combinations
 
 
 def get_moves_cost(distances_matrix: zeros, best_path: list, case: int, i: int, j: int, k: int):
     """
+    Calculates for each feasible swap its cost using the given distances matrix.
 
-    :param distances_matrix:
-    :param best_path:
-    :param case:
-    :param i:
-    :param j:
-    :param k:
-    :return:
+    :param distances_matrix: distances matrix for a TSP.
+    :param best_path: list which contains the best known path.
+    :param case: represent one of the 8 possible swap given a graph combination.
+    :param i: first index of given combination.
+    :param j: second index of given combination.
+    :param k: third index of given combination.
+    :return: cost for swap according to 'case' given variable
     """
 
-    A, B, C, D, E, F = best_path[i - 1], best_path[i], \
-                       best_path[j - 1], best_path[j], \
-                       best_path[k - 1], best_path[k % len(best_path)]
+    n1, n2, n3, n4, n5, n6 = best_path[i - 1], best_path[i], \
+                             best_path[j - 1], best_path[j], \
+                             best_path[k - 1], best_path[k % len(best_path)]
 
     if case == 0:
-        # first case is the current solution ABC
         return 0
     elif case == 1:
-        # second case is the case A'BC
-        return distances_matrix[A, B] + distances_matrix[E, F] - (distances_matrix[B, F] + distances_matrix[A, E])
+        return distances_matrix[n1, n2] + distances_matrix[n5, n6] \
+               - (distances_matrix[n2, n6] + distances_matrix[n1, n5])
     elif case == 2:
-        # ABC'
-        return distances_matrix[C, D] + distances_matrix[E, F] - (distances_matrix[D, F] + distances_matrix[C, E])
+        return distances_matrix[n3, n4] + distances_matrix[n5, n6] \
+               - (distances_matrix[n4, n6] + distances_matrix[n3, n5])
     elif case == 3:
-        # A'BC'
-        return distances_matrix[A, B] + distances_matrix[C, D] + distances_matrix[E, F] - \
-               (distances_matrix[A, D] + distances_matrix[B, F] + distances_matrix[E, C])
+        return distances_matrix[n1, n2] + distances_matrix[n3, n4] + distances_matrix[n5, n6] - \
+               (distances_matrix[n1, n4] + distances_matrix[n2, n6] + distances_matrix[n5, n3])
     elif case == 4:
-        # A'B'C
-        return distances_matrix[A, B] + distances_matrix[C, D] + distances_matrix[E, F] - \
-               (distances_matrix[C, F] + distances_matrix[B, D] + distances_matrix[E, A])
+        return distances_matrix[n1, n2] + distances_matrix[n3, n4] + distances_matrix[n5, n6] - \
+               (distances_matrix[n3, n6] + distances_matrix[n2, n4] + distances_matrix[n5, n1])
     elif case == 5:
-        # AB'C
-        return distances_matrix[B, A] + distances_matrix[D, C] - (distances_matrix[C, A] + distances_matrix[B, D])
+        return distances_matrix[n2, n1] + distances_matrix[n4, n3] \
+               - (distances_matrix[n3, n1] + distances_matrix[n2, n4])
     elif case == 6:
-        # AB'C'
-        return distances_matrix[A, B] + distances_matrix[C, D] + distances_matrix[E, F] - \
-               (distances_matrix[B, E] + distances_matrix[D, F] + distances_matrix[C, A])
+        return distances_matrix[n1, n2] + distances_matrix[n3, n4] + distances_matrix[n5, n6] - \
+               (distances_matrix[n2, n5] + distances_matrix[n4, n6] + distances_matrix[n3, n1])
     elif case == 7:
-        # A'B'C
-        return distances_matrix[A, B] + distances_matrix[C, D] + distances_matrix[E, F] - \
-               (distances_matrix[A, D] + distances_matrix[C, F] + distances_matrix[B, E])
+        return distances_matrix[n1, n2] + distances_matrix[n3, n4] + distances_matrix[n5, n6] - \
+               (distances_matrix[n1, n4] + distances_matrix[n3, n6] + distances_matrix[n2, n5])
     
     
-def reverse_segments(best_path, case, i, j, k):
+def reverse_segments(best_path: list, case: int, i: int, j: int, k: int):
     """
+    Used to reverse all the possible segments inside the current path.
 
-    :param best_path:
-    :param case:
-    :param i:
-    :param j:
-    :param k:
-    :return:
+    :param best_path: list which contains the best known path.
+    :param case: represent one of the 8 possible swap given a graph combination.
+    :param i: first index of given combination.
+    :param j: second index of given combination.
+    :param k: third index of given combination.
+    :return: new list containing swapped nodes.
     """
 
     if (i - 1) < (k % len(best_path)):
         first_segment = best_path[k % len(best_path):] + best_path[:i]
     else:
         first_segment = best_path[k % len(best_path):i]
+
     second_segment = best_path[i:j]
     third_segment = best_path[j:k]
 
