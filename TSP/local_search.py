@@ -4,24 +4,29 @@ from logging import info
 from data_structures.Tour import Tour
 
 
-def two_opt(current_tour: Tour, distances_matrix: zeros) -> Tour:
+def two_opt(current_tour: Tour, distances_matrix: zeros, verbose: bool) -> Tour:
     """
     Implements 2-OPT heuristic for TSP.
 
     :param current_tour: the initial tour which is provided by the Nearest Neighbor heuristic.
     :param distances_matrix: distances matrix for a TSP.
+    :param verbose: True for printing on log file, False otherwise.
+                    Default value is False.
+
     :return: the optimal tour according to 2-OPT heuristic.
     """
 
-    iteration = 0
-    info(' Started 2-OPT heuristic')
-    info(' Initial cost: %d', current_tour.calculate_total_cost(distances_matrix))
+    if verbose:
+        iteration = 0
+        info(' Started 2-OPT heuristic')
+        info(' Initial cost: %d', current_tour.calculate_total_cost(distances_matrix))
 
     best_tour = deepcopy(current_tour)
     improved = True
 
     while improved:
-        info(' Started iteration %d', iteration)
+        if verbose:
+            info(' Started iteration %d', iteration)
         improved = False
         for i in range(1, len(current_tour.path) - 2):
             for j in range(i + 2, len(current_tour.path)):
@@ -30,20 +35,24 @@ def two_opt(current_tour: Tour, distances_matrix: zeros) -> Tour:
 
                 old_edges_cost = get_edges_cost(distances_matrix, current_tour.path, i, j)
                 new_edges_cost = get_edges_cost(distances_matrix, current_tour.path, i, j, case='new')
-                info(' Iteration %d: \t Old cost: %d \t New cost: %d', iteration, old_edges_cost, new_edges_cost)
 
-                iteration += 1
+                if verbose:
+                    info(' Iteration %d: \t Old cost: %d \t New cost: %d', iteration, old_edges_cost, new_edges_cost)
+                    iteration += 1
+
                 if new_edges_cost < old_edges_cost:
                     best_tour.path[i:j] = current_tour.path[j-1:i-1:-1]
                     current_tour = best_tour
-                    info(' Swapping... got this path\n %s\n', current_tour.path)
+                    if verbose:
+                        info(' Swapping... got this path\n %s\n', current_tour.path)
                     improved = True
                     break
 
             if improved:
                 break
-    info(' Optimal solution found is\n %s', current_tour.path)
-    info(' Optimal solution cost is %d\n', current_tour.calculate_total_cost(distances_matrix))
+    if verbose:
+        info(' Optimal solution found is\n %s', current_tour.path)
+        info(' Optimal solution cost is %d\n', current_tour.calculate_total_cost(distances_matrix))
     return current_tour
 
 
@@ -56,6 +65,7 @@ def get_edges_cost(distances_matrix: zeros, current_path: list, index1: int, ind
     :param index1: first index to be swapped.
     :param index2: second index to be swapped.
     :param case: string representing the current swap to be made.
+
     :return: cost of the swapped edges
     """
 
@@ -65,41 +75,50 @@ def get_edges_cost(distances_matrix: zeros, current_path: list, index1: int, ind
               distances_matrix[current_path[index1], current_path[index2]])
 
 
-def three_opt(current_tour: Tour, distances_matrix: zeros) -> Tour:
+def three_opt(current_tour: Tour, distances_matrix: zeros, verbose: bool) -> Tour:
     """
     Implements 3-OPT heuristic for TSP.
 
     :param current_tour: the initial tour which is provided by the Nearest Neighbor heuristic.
     :param distances_matrix: distances matrix for a TSP.
+    :param verbose: True for printing on log file, False otherwise.
+                    Default value is False.
+
     :return: the optimal tour according to 3-OPT heuristic.
     """
 
-    iteration = 0
-    info(' Started 3-OPT heuristic')
-    info(' Initial cost: %d', current_tour.calculate_total_cost(distances_matrix))
+    if verbose:
+        iteration = 0
+        info(' Started 3-OPT heuristic')
+        info(' Initial cost: %d', current_tour.calculate_total_cost(distances_matrix))
 
     best_tour = deepcopy(current_tour)
     improved = True
     dict_cost = {0: 0, 1: 0, 2: 0, 3: 0, 4: 0, 5: 0, 6: 0, 7: 0}
 
     while improved:
-        info(' Started iteration %d', iteration)
+        if verbose:
+            info(' Started iteration %d', iteration)
         improved = False
         for (i, j, k) in get_combinations(len(current_tour.path)):
             for case in dict_cost:
                 dict_cost[case] = get_moves_cost(distances_matrix, best_tour.path, case, i, j, k)
 
             best_case = max(dict_cost, key=dict_cost.get)
-            iteration += 1
+            if verbose:
+                info(' Iteration %d: \t Old cost: %d \t New cost: %d',
+                     iteration, current_tour.calculate_total_cost(distances_matrix), dict_cost[best_case])
+                iteration += 1
             if dict_cost[best_case] > 0:
                 best_tour.set_path(reverse_segments(best_tour.path, best_case, i, j, k))
                 current_tour = best_tour
-                info(' Swapping... got this path\n %s\n', current_tour.path)
+                if verbose:
+                    info(' Swapping... got this path\n %s\n', current_tour.path)
                 improved = True
                 break
-
-    info(' Optimal solution found is\n %s', current_tour.path)
-    info(' Optimal solution cost is %d\n', current_tour.calculate_total_cost(distances_matrix))
+    if verbose:
+        info(' Optimal solution found is\n %s', current_tour.path)
+        info(' Optimal solution cost is %d\n', current_tour.calculate_total_cost(distances_matrix))
     return current_tour
 
 
@@ -124,6 +143,7 @@ def get_moves_cost(distances_matrix: zeros, best_path: list, case: int, i: int, 
     :param i: first index of given combination.
     :param j: second index of given combination.
     :param k: third index of given combination.
+
     :return: cost for swap according to 'case' given variable
     """
 
@@ -165,6 +185,7 @@ def reverse_segments(best_path: list, case: int, i: int, j: int, k: int):
     :param i: first index of given combination.
     :param j: second index of given combination.
     :param k: third index of given combination.
+
     :return: new list containing swapped nodes.
     """
 

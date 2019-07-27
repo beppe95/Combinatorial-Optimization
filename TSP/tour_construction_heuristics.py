@@ -5,15 +5,19 @@ from logging import info
 from data_structures.Tour import Tour
 
 
-def nearest_neighbor_heuristic(distances_matrix: numpy.zeros) -> Tour:
+def nearest_neighbor_heuristic(distances_matrix: numpy.zeros, verbose: bool) -> Tour:
     """
     Implements Nearest Neighbor heuristic for TSP.
 
     :param distances_matrix: distances matrix for a TSP
+    :param verbose: True for printing on log file, False otherwise.
+                    Default value is False.
+
     :return: a feasible tour according to NN heuristic
     """
 
-    info(' Calculating Nearest Neighbor heuristic')
+    if verbose:
+        info(' Calculating Nearest Neighbor heuristic')
 
     matrix_dimension = len(distances_matrix) - 1
 
@@ -41,5 +45,6 @@ def nearest_neighbor_heuristic(distances_matrix: numpy.zeros) -> Tour:
 
     nn_tour.path.append(nn_tour.path[0])
 
-    info(' Got tour based on Nearest Neighbor heuristic.\n')
+    if verbose:
+        info(' Got tour based on Nearest Neighbor heuristic.\n')
     return nn_tour
