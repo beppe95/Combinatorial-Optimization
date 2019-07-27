@@ -63,7 +63,7 @@ def list_to_distances_matrix(tsp_nodes: list, verbose, metric='euclidean',) -> z
            If metric='manhattan' then method will use Manhattan Distance.
            Otherwise, if metric='euclidean' then method will use Euclidean Distance.
 
-    :return: a len(tsp_nodes) x len(tsp_nodes) matrix, named 'distances_matrix', which contains
+    :return: a square matrix, named 'distances_matrix', which contains
              for each pair of nodes their distance.
     """
 

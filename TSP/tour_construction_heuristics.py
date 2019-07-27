@@ -48,3 +48,4 @@ def nearest_neighbor_heuristic(distances_matrix: numpy.zeros, verbose: bool) -> 
     if verbose:
         info(' Got tour based on Nearest Neighbor heuristic.\n')
     return nn_tour
+
