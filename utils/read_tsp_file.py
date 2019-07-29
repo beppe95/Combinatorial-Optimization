@@ -29,7 +29,7 @@ def read_file(problem_name: str, verbose: bool) -> tuple:
 
         tsp_nodes = list()
         for node in tsp_lines[6:-1]:
-            node_info = node.split(' ')
+            node_info = node.strip().split(' ')
             tsp_nodes.append(Node(int(node_info[0]), int(float(node_info[1])), int(float(node_info[2]))))
 
     if verbose:
@@ -40,13 +40,15 @@ def read_file(problem_name: str, verbose: bool) -> tuple:
         opt_lines = opt_file.readlines()
 
         optimal_tour = Tour()
-        for opt_node in opt_lines[6:-2]:
-            optimal_tour.path.append(int(opt_node))
+        if len(opt_lines) != 0:
+            for opt_node in opt_lines[6:-2]:
+                optimal_tour.path.append(int(opt_node))
+
+            optimal_tour.path.append(optimal_tour.path[0])
 
     if verbose:
         info(' %s.opt.tour EOF reached\n', problem_name)
 
-    optimal_tour.path.append(optimal_tour.path[0])
 
     return tsp_nodes, optimal_tour
 
