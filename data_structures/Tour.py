@@ -6,8 +6,8 @@ class Tour:
     A TSP tour.
     """
 
-    def __init__(self):
-        self.path = list()
+    def __init__(self, path: list = list()):
+        self.path = path
 
     def calculate_total_cost(self, distances_matrix: ndarray) -> int:
         return sum([distances_matrix[self.path[i - 1], self.path[i]]

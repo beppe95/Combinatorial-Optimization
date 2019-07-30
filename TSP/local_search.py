@@ -4,7 +4,7 @@ from logging import info
 from data_structures.Tour import Tour
 
 
-def two_opt(current_tour: Tour, distances_matrix: zeros, verbose: bool) -> Tour:
+def two_opt(current_tour: Tour=None, distances_matrix: zeros=None, verbose: bool=None) -> Tour:
     """
     Implements 2-OPT heuristic for TSP.
 
