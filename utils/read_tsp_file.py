@@ -49,7 +49,6 @@ def read_file(problem_name: str, verbose: bool) -> tuple:
     if verbose:
         info(' %s.opt.tour EOF reached\n', problem_name)
 
-
     return tsp_nodes, optimal_tour
 
 
@@ -89,3 +88,42 @@ def list_to_distances_matrix(tsp_nodes: list, verbose, metric='euclidean',) -> z
         info(' Distances matrix is ready for use now.\n')
     return distances_matrix
 
+
+'''from numpy import array
+from matplotlib.pyplot import plot, show
+
+
+def draw_plot(tsp_nodes: list, path: list):
+  
+
+    x = [-1, 0.5, 1, -0.5]
+    y = [0.5, 1, -0.5, -1]
+
+    plot(x[])
+    show()
+
+
+    path_data = array(path)
+    print(path_data)
+
+    node_1_coord = _get_node_coordinate(tsp_nodes, path_data[0])
+    node_2_coord = _get_node_coordinate(tsp_nodes, path_data[1])
+    node_3_coord = _get_node_coordinate(tsp_nodes, path_data[2])
+
+    plot(node_1_coord, node_2_coord)
+    plot(node_1_coord, node_3_coord)
+    show()
+
+    for i in range(1, len(path_data)):
+        node_1_coord = _get_node_coordinate(tsp_nodes, path_data[i-1])
+        node_2_coord = _get_node_coordinate(tsp_nodes, path_data[i])
+
+        plot(node_1_coord, node_2_coord)
+
+    show()
+
+
+def _get_node_coordinate(tsp_nodes: list, n_id: int) -> list:
+    elem = [x for x in tsp_nodes if x.node_id == n_id][0]
+    return [elem.x, elem.y]
+'''
