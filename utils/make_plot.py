@@ -1,26 +1,34 @@
-from matplotlib.pyplot import plot, show
+from matplotlib import pyplot as plt
 
 
 def draw_plot(tsp_nodes: list, path: list):
     """
     Draws plot for tbe given path.
     """
+    print(path)
+    '''fig = plt.figure()
+    ax = fig.add_subplot(111)
 
-    data = list()
+    ids, xs, ys = list(), list(), list()
+
     for i in range(len(path)):
-        curr_coord = _get_node_coordinate(tsp_nodes, path[i])
-        data.append(curr_coord)
+        curr_coords = _get_node_coordinates(tsp_nodes, path[i])
+        ids.append(curr_coords[0])
+        xs.append(curr_coords[1])
+        ys.append(curr_coords[2])
 
-    for i in range(1, len(data)):
-        plot([data[i - 1][0], data[i][0]], [data[i - 1][1], data[i][1]], color='black', linestyle='dashed',
+    plt.plot(xs, ys, color='black', linestyle='dashed',
              marker='o', markerfacecolor='red', markersize=8)
+    plt.plot([xs[0], xs[len(xs)-1]], [ys[0], ys[len(ys)-1]], color='black', linestyle='dashed',
+             marker='o', markerfacecolor='red', markersize=8)
+    
+    for xy in zip(xs, ys):
+        ax.annotate('(%s, %s)' % xy, xy=xy, textcoords='data')  # <--
 
-    plot([data[0][0], data[len(data)-1][0]], [data[0][1], data[len(data)-1][1]], color='black', linestyle='dashed',
-         marker='o', markerfacecolor='red', markersize=8)
-
-    show()
+    plt.show()'''
 
 
-def _get_node_coordinate(tsp_nodes: list, n_id: int):
+
+def _get_node_coordinates(tsp_nodes: list, n_id: int):
     elem = [x for x in tsp_nodes if x.node_id == n_id][0]
-    return [elem.x, elem.y]
+    return [elem.node_id, elem.x, elem.y]

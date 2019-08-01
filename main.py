@@ -13,6 +13,6 @@ def perform(search_type):
 
 
 if __name__ == '__main__':
-    tsp_problem = 'berlin52'
-    perform(lambda: local_search(tsp_problem, draw=True, verbose=False))
-    perform(lambda: multi_start_local_search(tsp_problem, 10, draw=True, verbose=False))
+    tsp_problem = 'st70'
+    perform(lambda: local_search(tsp_problem, draw=False, verbose=False))
+    perform(lambda: multi_start_local_search(tsp_problem, 10, draw=False, verbose=False))

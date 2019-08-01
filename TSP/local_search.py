@@ -4,7 +4,7 @@ from logging import info
 from data_structures.Tour import Tour
 
 
-def two_opt(current_tour: Tour=None, distances_matrix: zeros=None, verbose: bool=None) -> Tour:
+def two_opt(current_tour: Tour = None, distances_matrix: zeros = None, verbose: bool = None) -> Tour:
     """
     Implements 2-OPT heuristic for TSP.
 
@@ -33,8 +33,8 @@ def two_opt(current_tour: Tour=None, distances_matrix: zeros=None, verbose: bool
                 if j - i == 1 or j - i == len(current_tour.path) - 2:
                     continue
 
-                old_edges_cost = get_edges_cost(distances_matrix, current_tour.path, i, j)
-                new_edges_cost = get_edges_cost(distances_matrix, current_tour.path, i, j, case='new')
+                old_edges_cost = _get_edges_cost(distances_matrix, current_tour.path, i, j)
+                new_edges_cost = _get_edges_cost(distances_matrix, current_tour.path, i, j, case='new')
 
                 if verbose:
                     info(' Iteration %d: \t Old cost: %d \t New cost: %d', iteration, old_edges_cost, new_edges_cost)
@@ -56,7 +56,7 @@ def two_opt(current_tour: Tour=None, distances_matrix: zeros=None, verbose: bool
     return current_tour
 
 
-def get_edges_cost(distances_matrix: zeros, current_path: list, index1: int, index2: int, case: str = 'old') -> int:
+def _get_edges_cost(distances_matrix: zeros, current_path: list, index1: int, index2: int, case: str = 'old') -> int:
     """
     Calculates the cost of the edges to be swapped inside the tour.
 
@@ -100,9 +100,9 @@ def three_opt(current_tour: Tour, distances_matrix: zeros, verbose: bool) -> Tou
         if verbose:
             info(' Started iteration %d', iteration)
         improved = False
-        for (i, j, k) in get_combinations(len(current_tour.path)):
+        for (i, j, k) in _get_combinations(len(current_tour.path)):
             for case in dict_cost:
-                dict_cost[case] = get_moves_cost(distances_matrix, best_tour.path, case, i, j, k)
+                dict_cost[case] = _get_moves_cost(distances_matrix, best_tour.path, case, i, j, k)
 
             best_case = max(dict_cost, key=dict_cost.get)
             if verbose:
@@ -110,7 +110,7 @@ def three_opt(current_tour: Tour, distances_matrix: zeros, verbose: bool) -> Tou
                      iteration, current_tour.calculate_total_cost(distances_matrix), dict_cost[best_case])
                 iteration += 1
             if dict_cost[best_case] > 0:
-                best_tour.set_path(reverse_segments(best_tour.path, best_case, i, j, k))
+                best_tour.set_path(_reverse_segments(best_tour.path, best_case, i, j, k))
                 current_tour = best_tour
                 if verbose:
                     info(' Swapping... got this path\n %s\n', current_tour.path)
@@ -119,10 +119,12 @@ def three_opt(current_tour: Tour, distances_matrix: zeros, verbose: bool) -> Tou
     if verbose:
         info(' Optimal solution found is\n %s', current_tour.path)
         info(' Optimal solution cost is %d\n', current_tour.calculate_total_cost(distances_matrix))
+
+    current_tour.set_path(_make_list(current_tour.path))
     return current_tour
 
 
-def get_combinations(n: int):
+def _get_combinations(n: int):
     """
     Generate all possible i-j-k feasible combinations for the given input number.
 
@@ -133,7 +135,7 @@ def get_combinations(n: int):
     return combinations
 
 
-def get_moves_cost(distances_matrix: zeros, best_path: list, case: int, i: int, j: int, k: int):
+def _get_moves_cost(distances_matrix: zeros, best_path: list, case: int, i: int, j: int, k: int):
     """
     Calculates for each feasible swap its cost using the given distances matrix.
 
@@ -176,7 +178,7 @@ def get_moves_cost(distances_matrix: zeros, best_path: list, case: int, i: int, 
                (distances_matrix[n1, n4] + distances_matrix[n3, n6] + distances_matrix[n2, n5])
     
     
-def reverse_segments(best_path: list, case: int, i: int, j: int, k: int):
+def _reverse_segments(best_path: list, case: int, i: int, j: int, k: int) -> list:
     """
     Used to reverse all the possible segments inside the current path.
 
@@ -214,3 +216,9 @@ def reverse_segments(best_path: list, case: int, i: int, j: int, k: int):
     elif case == 7:
         solution = list(reversed(first_segment)) + list(reversed(second_segment)) + list(reversed(third_segment))
     return solution
+
+
+def _make_list(best_path: list) -> list:
+    li = list(dict.fromkeys(best_path))
+    li.append(best_path[0])
+    return li

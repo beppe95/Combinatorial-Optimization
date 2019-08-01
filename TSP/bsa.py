@@ -66,7 +66,6 @@ def multi_start_local_search(tsp_problem, k, draw, verbose):
         h_tour = random_tour_heuristic(distances_matrix, verbose)
         two_opt_tour = two_opt(h_tour, distances_matrix, verbose)
         two_opt_tour_cost = two_opt_tour.calculate_total_cost(distances_matrix)
-        
         if two_opt_tour_cost < best_cost:
             best_h_tour, best_tour, best_cost = h_tour, two_opt_tour, two_opt_tour_cost
 
