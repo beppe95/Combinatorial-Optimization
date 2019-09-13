@@ -5,10 +5,8 @@ def draw_plot(tsp_nodes: list, path: list):
     """
     Draws plot for tbe given path.
     """
-    print(path)
-    '''fig = plt.figure()
-    ax = fig.add_subplot(111)
 
+    fig = plt.figure()
     ids, xs, ys = list(), list(), list()
 
     for i in range(len(path)):
@@ -21,12 +19,7 @@ def draw_plot(tsp_nodes: list, path: list):
              marker='o', markerfacecolor='red', markersize=8)
     plt.plot([xs[0], xs[len(xs)-1]], [ys[0], ys[len(ys)-1]], color='black', linestyle='dashed',
              marker='o', markerfacecolor='red', markersize=8)
-    
-    for xy in zip(xs, ys):
-        ax.annotate('(%s, %s)' % xy, xy=xy, textcoords='data')  # <--
-
-    plt.show()'''
-
+    plt.show()
 
 
 def _get_node_coordinates(tsp_nodes: list, n_id: int):

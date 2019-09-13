@@ -23,8 +23,8 @@ def local_search(tsp_problem, draw, verbose):
 
     tsp_nodes, optimal_tour = read_file(tsp_problem, verbose)
     distances_matrix = list_to_distances_matrix(tsp_nodes, verbose)
-    # h_tour = random_tour_heuristic(distances_matrix, verbose)
-    h_tour = nearest_neighbor_heuristic(distances_matrix, verbose)
+    h_tour = random_tour_heuristic(distances_matrix, verbose)
+    #h_tour = nearest_neighbor_heuristic(distances_matrix, verbose)
 
     two_opt_tour = two_opt(h_tour, distances_matrix, verbose)
     three_opt_tour = three_opt(h_tour, distances_matrix, verbose)
@@ -36,6 +36,7 @@ def local_search(tsp_problem, draw, verbose):
     if draw:
         draw_plot(tsp_nodes, h_tour.path)
         draw_plot(tsp_nodes, two_opt_tour.path)
+        draw_plot(tsp_nodes, optimal_tour.path)
         draw_plot(tsp_nodes, three_opt_tour.path)
 
 
@@ -63,11 +64,17 @@ def multi_start_local_search(tsp_problem, k, draw, verbose):
     best_tour = None
     best_cost = maxsize
     for i in range(k):
+        #h_tour = random_tour_heuristic(distances_matrix, verbose)
         h_tour = random_tour_heuristic(distances_matrix, verbose)
         two_opt_tour = two_opt(h_tour, distances_matrix, verbose)
         two_opt_tour_cost = two_opt_tour.calculate_total_cost(distances_matrix)
         if two_opt_tour_cost < best_cost:
             best_h_tour, best_tour, best_cost = h_tour, two_opt_tour, two_opt_tour_cost
+
+        '''three_opt_tour = three_opt(h_tour, distances_matrix, verbose)
+        three_opt_tour_cost = three_opt_tour.calculate_total_cost(distances_matrix)
+        if three_opt_tour_cost < best_cost:
+            best_h_tour, best_tour, best_cost = h_tour, three_opt_tour, three_opt_tour_cost'''
 
     print('Best Tour is:',  best_tour, '\nBest cost is:', best_cost)
 
