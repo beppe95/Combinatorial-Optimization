@@ -1,8 +1,8 @@
 from sys import maxsize
-from TSP.local_search import two_opt, three_opt
+from som.local_search import two_opt, three_opt
 from utils.make_plot import draw_plot
 from utils.read_tsp_file import read_file, list_to_distances_matrix
-from TSP.tour_construction_heuristics import random_tour_heuristic, nearest_neighbor_heuristic
+from som.tour_construction_heuristics import random_tour_heuristic, nearest_neighbor_heuristic
 
 
 def local_search(tsp_problem, draw, verbose):
