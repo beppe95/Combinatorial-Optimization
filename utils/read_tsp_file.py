@@ -45,7 +45,7 @@ def read_file(problem_name: str, verbose: bool) -> tuple:
                 optimal_tour.path.append(int(opt_node))
 
             optimal_tour.path.append(optimal_tour.path[0])
-    print(optimal_tour)
+    # print(optimal_tour)
     if verbose:
         info(' %s.opt.tour EOF reached\n', problem_name)
 
