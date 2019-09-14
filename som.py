@@ -6,7 +6,7 @@ from data_structures import Tour, Node
 
 
 tsp_nodes = read_file('st70', verbose=False)[0]
-dist_mat = list_to_distances_matrix(tsp_nodes, verbose=False)
+dist_matrix = list_to_distances_matrix(tsp_nodes, verbose=False)
 
 N_points = len(tsp_nodes)
 N_neurons = N_points * 2
@@ -30,4 +30,4 @@ tour = Tour.Tour(visit_order)
 draw_plot(tsp_nodes, tour.path)
 
 # ~ COST
-print(tour.calculate_total_cost(dist_mat))
+print(tour.calculate_total_cost(dist_matrix))
