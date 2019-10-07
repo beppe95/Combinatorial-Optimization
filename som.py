@@ -23,11 +23,11 @@ som = MiniSom(1, N_neurons, 2, sigma=5)
 som.random_weights_init(points)
 som.train_random(points, 100000)
 visit_order = [i+1 for i in np.argsort([som.winner(p)[1] for p in points])]
-
+visit_order.append(visit_order[0])
 
 # ~ PLOT
 tour = Tour.Tour(visit_order)
 draw_plot(tsp_nodes, tour.path)
 
 # ~ COST
-print(tour.calculate_total_cost(dist_matrix))
+print('Il costo del tour ottenuto è:', tour.calculate_total_cost(dist_matrix))
